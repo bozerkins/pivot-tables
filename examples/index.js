@@ -1,7 +1,11 @@
 $.ajaxSetup({async:false});
 var dataset = null;
-$.post('../dataset/mtcars.json', function(response) {
+$.post('../dataset/mps.json', function(response) {
 	dataset = response;
+	$.each(dataset, function(key, val){
+		val['Age Bin'] = val['Age'] ? Math.round(parseInt(val['Age']) / 10) * 10 : 0;
+		val['Gender Imbalance'] = val["Gender"] == "Male" ? 1 : -1;
+	})
 })
 $.ajaxSetup({async:true});
 
@@ -14,14 +18,26 @@ model.setDataset(dataset);
 var connector = new Connector();
 connector.setModel(model.getModel());
 
+// var renderer = new TableRenderer();
+// renderer.setConnector(connector);
+// renderer.setContainer($('div.container'));
+// renderer.render();
+
 var renderer = new PivotTableRenderer();
 renderer.setConnector(connector);
 renderer.setContainer($('div.container'));
-// renderer.setRows(['_row', 'cyl', 'vs']);
-renderer.setRows(['vs']);
-// renderer.setCols(['gear', 'carb']);
-renderer.setCols(['cyl']);
-renderer.render();
+
+
+
+renderer.setRows(['Party', 'Gender Imbalance']);
+renderer.setCols(['Age Bin', 'Gender']);
+// renderer.setCols(['Age Bin']);
+
+
+
+renderer.render(function(model) {
+	return model.getDataset().length;
+});
 // model.operation().column('carb').greaterThan(10).filter(model);
 // model.filter('carb', 'greater than', 10);
 //

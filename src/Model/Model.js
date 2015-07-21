@@ -83,6 +83,32 @@ var Model = Class.extend(function()
 		return this;
 	}
 
+	this.distinct = function(column)
+	{
+		var dataset = this.getDataset();
+		var distinct = [];
+		$.each(dataset, function(key, value){
+			if ($.inArray(value[column], distinct) === -1) {
+				distinct.push(value[column]);
+			}
+		});
+		return distinct;
+	}
+
+	this.pick = function(columns)
+	{
+		var picked = [];
+		var dataset = this.getDataset();
+		$.each(dataset, function(recordKey, record){
+			var pickedRecord = {};
+			$.each(columns, function(colKey, col){
+				pickedRecord[col] = record[col];
+			});
+			picked.push(pickedRecord);
+		});
+		return picked;
+	}
+
 	/**
 	 * Subset getters
 	 */
