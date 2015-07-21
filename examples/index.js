@@ -3,7 +3,7 @@ var dataset = null;
 $.post('../dataset/mps.json', function(response) {
 	dataset = response;
 	$.each(dataset, function(key, val){
-		val['Age Bin'] = val['Age'] ? Math.round(parseInt(val['Age']) / 10) * 10 : 0;
+		val['Age Bin'] = val['Age'] - val['Age'] % 10;
 		val['Gender Imbalance'] = val["Gender"] == "Male" ? 1 : -1;
 	})
 })
@@ -35,9 +35,11 @@ renderer.setCols(['Age Bin', 'Gender']);
 
 
 
-renderer.render(function(model) {
-	return model.getDataset().length;
-});
+renderer.render(function(model) {return model.getDataset().length;});
+// renderer.render(function(model) {return model.distinct("Age").length;});
+
+
+
 // model.operation().column('carb').greaterThan(10).filter(model);
 // model.filter('carb', 'greater than', 10);
 //
