@@ -25,21 +25,8 @@ var PivotTableRenderer = Renderer.extend(function()
 		return this.cols;
 	}
 
-	this.render = function(aggregator)
+	this.makeRowsWithValues = function()
 	{
-		var model = this.getConnector().getModel();
-		console.log(model);
-		// generate data
-		var result = [{filters: [], model: model}];
-
-		var cols = [];
-		$.each(this.getCols(), function(key, col){
-			var info = {};
-			info.name = col;
-			info.vals = model.distinct(col).sort();
-			cols.push(info);
-		});
-
 		var rows = [];
 		$.each(this.getRows(), function(key, row){
 			var info = {};
@@ -47,8 +34,28 @@ var PivotTableRenderer = Renderer.extend(function()
 			info.vals = model.distinct(row).sort();
 			rows.push(info);
 		});
+		return rows;
+	}
 
-		$.each([].concat([].concat(cols).reverse()).concat([].concat(rows).reverse()), function(groupKey, group){
+	this.makeColsWithValues = function()
+	{
+		var cols = [];
+		$.each(this.getCols(), function(key, col){
+			var info = {};
+			info.name = col;
+			info.vals = model.distinct(col).sort();
+			cols.push(info);
+		});
+		return cols;
+	}
+
+	this.makeResultGrid = function(model, cols, rows)
+	{
+		var colsReverse = cols.slice(0).reverse();
+		var rowsReverse = rows.slice(0).reverse();
+		var result = [{filters: [], model: model}];
+
+		$.each([].concat(colsReverse).concat(rowsReverse), function(groupKey, group){
 			var modelsCollector = [];
 
 			$.each(group.vals, function(valKey, val){
@@ -69,31 +76,81 @@ var PivotTableRenderer = Renderer.extend(function()
 			});
 			result = modelsCollector;
 		});
+		return result;
+	}
 
+	this.makeResultRows = function(model, rows)
+	{
+		var rowsReverse = rows.slice(0).reverse();
+		var result = [{filters: [], model: model}];
+
+		$.each([].concat(rowsReverse), function(groupKey, group){
+			var modelsCollector = [];
+
+			$.each(group.vals, function(valKey, val){
+
+				$.each(result, function(modelKey, modelVal){
+
+					var filters = modelVal.filters.slice(0); // clone
+
+					filters.unshift({
+						column: group.name,
+						value: val
+					})
+					modelsCollector.push({
+						filters: filters,
+						model: modelVal.model.filter(group.name, 'equals', val).getModel()
+					});
+				});
+			});
+			result = modelsCollector;
+		});
+		return result;
+	}
+
+	this.makeResultCols = function(model, cols)
+	{
+		var colsReverse = cols.slice(0).reverse();
+		var result = [{filters: [], model: model}];
+
+		$.each([].concat(colsReverse), function(groupKey, group){
+			var modelsCollector = [];
+
+			$.each(group.vals, function(valKey, val){
+
+				$.each(result, function(modelKey, modelVal){
+
+					var filters = modelVal.filters.slice(0); // clone
+
+					filters.unshift({
+						column: group.name,
+						value: val
+					})
+					modelsCollector.push({
+						filters: filters,
+						model: modelVal.model.filter(group.name, 'equals', val).getModel()
+					});
+				});
+			});
+			result = modelsCollector;
+		});
+		return result;
+	}
+
+	this.render = function(aggregator)
+	{
+		var model = this.getConnector().getModel();
+		var cols = this.makeColsWithValues();
+		var rows = this.makeRowsWithValues();
+
+		var result = this.makeResultGrid(model, cols, rows)
 		$.each(result, function(key, val){
 			val.value = aggregator(val.model);
 		});
 
-		console.log('rows', rows);
-		console.log('cols', cols);
-		console.log('result', result);
-
-		$.each(result, function(key, val){
-			var s = '';
-			$.each(val.filters, function(key2, val2){
-				s += val2.column + ' - ' + val2.value + ';';
-			});
-			// console.log(s);
-		});
-
-
-
-		// define trs length
-		// trs.length = cols depth + (rows depth > 0 ? 1 : 0) + rows + Totals row
-		//
-		// define tds length
-		// tds.length = rows depth + (cols depth > 0 ? 1 : 0) + cols + Totals row
-
+		var resultRows = this.makeResultRows(model, rows);
+		var resultCols = this.makeResultRows(model, cols);
+		var resultTotal = model;
 
 		var containerEl = this.getContainer();
 		var tableEl = $('<table>');
@@ -171,16 +228,16 @@ var PivotTableRenderer = Renderer.extend(function()
 			for(var i = 0; i < rowsCardinality; i++) {
 				var tr = $('<tr>');
 				var rowValIndex = i;
-				var rows2 = [].concat(rows).reverse()
+				var rowsReverse = rows.slice(0).reverse()
 				var backCardinality = 1;
-				$.each(rows2, function(key){
-					var row = rows2[key];
-					var next = rows2[key + 1];
+				$.each(rowsReverse, function(key){
+					var row = rowsReverse[key];
+					var next = rowsReverse[key + 1];
 					var td = $('<td>');
 					if (rowValIndex % 1 === 0) {
 						td.text(row.vals[rowValIndex % row.vals.length]);
 						td.attr('rowspan', backCardinality);
-						if (!next) {
+						if (key === 0) {
 							td.attr('colspan', 2);
 						}
 						tr.prepend(td);
@@ -192,17 +249,15 @@ var PivotTableRenderer = Renderer.extend(function()
 					}
 				});
 
-				var rowValueSum = 0;
 				for(var j = 0; j < colsCardinality; j++) {
 					var td = $('<td>');
 					var tdValue = result[i * colsCardinality + j].value;
-					rowValueSum += tdValue;
 					td.text(tdValue != 0 ? tdValue : '');
 					tr.append(td);
 				}
 
 				var td = $('<td>');
-				td.text(rowValueSum);
+				td.text(aggregator(resultRows[i].model));
 				tr.append(td);
 
 				tableEl.append(tr);
@@ -219,17 +274,12 @@ var PivotTableRenderer = Renderer.extend(function()
 		var rowValueSum = 0;
 		for(var i = 0; i < colsCardinality; i++) {
 			var td = $('<td>');
-			var tdValue = 0;
-			for(var j = 0; j < rowsCardinality; j++) {
-				tdValue += result[j*colsCardinality + i].value;
-			}
-
-			td.text(tdValue);
+			td.text(aggregator(resultCols[i].model));
 			tr.append(td);
 		}
 
 		var td = $('<td>');
-		td.text(result.reduce(function(result, item){ return result + item.value}, 0));
+		td.text(aggregator(resultTotal));
 		tr.append(td);
 
 		containerEl.append(tableEl);
