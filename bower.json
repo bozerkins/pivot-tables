@@ -1,0 +1,21 @@
+{
+  "name": "pivot-tables",
+  "homepage": "https://github.com/bozerkins/pivot-tables",
+  "authors": [
+    "Bogdans Ozerkins <b.ozerkins@gmail.com>"
+  ],
+  "description": "a simple library for drawing pivot tables out of datasets",
+  "main": "",
+  "keywords": [
+    "pivot",
+    "tables",
+    "datasets"
+  ],
+  "license": "APACHE 2.0",
+  "ignore": [
+    "bower_components"
+  ],
+  "devDependencies": {
+    "jquery": "^3.1.1"
+  }
+}
