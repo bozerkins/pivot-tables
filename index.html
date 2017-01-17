@@ -15,7 +15,7 @@
 
 <div class='container'></div>
 <script>
-    $.post('./dataset/mps.json', function(dataset) {
+    $.get('./mps.json', function(dataset) {
 
         $.each(dataset, function(key, val){
             val['Age Bin'] = val['Age'] - val['Age'] % 10;
