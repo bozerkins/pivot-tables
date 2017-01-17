@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+
+<body>
+
+<script src="./bower_components/jquery/dist/jquery.min.js"></script>
+<script src="./lib/model.js"></script>
+<script src="./lib/query.js"></script>
+<script src="./lib/renderer.js"></script>
+
+<div class='container'></div>
+<script>
+    $.post('./dataset/mps.json', function(dataset) {
+
+        $.each(dataset, function(key, val){
+            val['Age Bin'] = val['Age'] - val['Age'] % 10;
+            val['Gender Imbalance'] = val["Gender"] == "Male" ? 1 : -1;
+        });
+
+        var model = new Model(
+            ['_row','am','carb','cyl','disp','drat','gear','hp','mpg','qsec','vs','wt'],
+            dataset
+        );
+
+        var query = new Query();
+
+        var renderer = new PivotTableRenderer(
+            $('.container'),
+            query,
+            model,
+            ['Party', 'Gender Imbalance'],
+            ['Age Bin', 'Gender']
+        );
+
+        renderer.render(function(model) { return model.getDataset().length; });
+
+    });
+</script>
+
+</body>
+</html>

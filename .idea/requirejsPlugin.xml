@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RequirejsProjectComponent">
+    <option name="publicPath" value="./" />
+    <option name="configFilePath" value="config.js" />
+    <option name="baseUrl" value="./src" />
+    <option name="overrideBaseUrl" value="true" />
+    <option name="pluginEnabled" value="true" />
+  </component>
+</project>
