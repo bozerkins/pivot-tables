@@ -31,7 +31,7 @@ var Filter = Class.extend(function()
 	this.constructor = function(instruction)
 	{
 		this.instruction = instruction;
-	}
+	};
 
 	/**
 	 * Setters / getters
@@ -43,7 +43,7 @@ var Filter = Class.extend(function()
 			throw "No column property passed to Instruction";
 		}
 		return this.instruction.column;
-	}
+	};
 
 	this.getOperation = function()
 	{
@@ -55,17 +55,17 @@ var Filter = Class.extend(function()
 			throw "Invalid operation requested in Instruction"
 		}
 		return this[this.instruction.operation.replace(/\s+/g, '_')];
-	}
+	};
 
 	this.getValue = function()
 	{
 		return this.instruction.value;
-	}
+	};
 
 	this.operate = function(dataset)
 	{
 		return $.grep(dataset, (this.getOperation()).bind(this));
-	}
+	};
 
 	/**
 	 * Filter methods
@@ -73,65 +73,65 @@ var Filter = Class.extend(function()
 	this.includes = function(item)
 	{
 		return $.inArray(item[this.getColumn()], this.getValue()) !== -1;
-	}
+	};
 	this.excludes = function(item)
 	{
 		return !this.includes(item);
-	}
+	};
 	this.greater_than = function(item)
 	{
 		return item[this.getColumn()] > this.getValue();
-	}
+	};
 	this.less_than = function(item)
 	{
 		return item[this.getColumn()] < this.getValue();
-	}
+	};
 	this.equals = function(item)
 	{
 		return item[this.getColumn()] === this.getValue();
-	}
+	};
 	this.not_equals = function(item)
 	{
 		return !this.equals(item)
-	}
+	};
 	this.between = function(item)
 	{
 		return item[this.getColumn()] < this.getValue()[0] && item[this.getColumn()] > this.getValue()[1];
-	}
+	};
 	this.not_between = function(item)
 	{
 		return !this.between(item);
-	}
+	};
 	this.begins_with = function(item)
 	{
 		return item[this.getColumn()].indexOf(this.getValue()) === 0;
-	}
+	};
 	this.not_begins_with = function(item)
 	{
 		return !this.begins_with(item);
-	}
+	};
 	this.ends_with = function(item)
 	{
 		return item[this.getColumn()].lastIndexOf(this.getValue()) === (item[this.getColumn()].length - this.getValue().length);
-	}
+	};
 	this.not_ends_with = function(item)
 	{
 		return !this.ends_with(item);
-	}
+	};
 	this.contains = function(item)
 	{
 		return item[this.getColumn()].indexOf(this.getValue()) !== -1;
-	}
+	};
 	this.not_contains = function(item)
 	{
 		return !this.contains(item);
-	}
+	};
 	this.exists = function(item)
 	{
 		return item[this.getColumn()] === null;
-	}
+	};
 	this.not_exists = function(item)
 	{
 		return !this.exists(item);
-	}
+	};
 });

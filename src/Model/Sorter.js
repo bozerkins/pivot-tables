@@ -20,7 +20,7 @@ var Sorter = Class.extend(function()
 				value.flag = -1;
 			}
 		});
-	}
+	};
 
 
 	/**
@@ -30,7 +30,7 @@ var Sorter = Class.extend(function()
 	this.operate = function(dataset)
 	{
 		return dataset.sort((this.sortPairCallback).bind(this));
-	}
+	};
 
 	this.sortPairCallback = function(item1, item2)
 	{
@@ -41,5 +41,5 @@ var Sorter = Class.extend(function()
 			}
 		});
 		return result;
-	}
+	};
 });

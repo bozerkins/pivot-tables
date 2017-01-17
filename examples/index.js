@@ -26,9 +26,6 @@ connector.setModel(model.getModel());
 var renderer = new PivotTableRenderer();
 renderer.setConnector(connector);
 renderer.setContainer($('div.container'));
-
-
-
 renderer.setRows(['Party', 'Gender Imbalance']);
 renderer.setCols(['Age Bin', 'Gender']);
 // renderer.setCols(['Age Bin']);

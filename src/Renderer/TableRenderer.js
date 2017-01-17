@@ -29,5 +29,5 @@ var TableRenderer = Renderer.extend(function()
 		tableEl.append(headerEl);
 		tableEl.append(bodyEl);
 		return this;
-	}
+	};
 });

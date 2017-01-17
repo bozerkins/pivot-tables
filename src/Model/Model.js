@@ -16,29 +16,29 @@ var Model = Class.extend(function()
 	{
 		this.columns = columns;
 		return this;
-	}
+	};
 
 	this.getColumns = function()
 	{
 		return this.columns
-	}
+	};
 
 	this.setDataset = function(dataset)
 	{
 		this.dataset = dataset;
 		return this;
-	}
+	};
 
 	this.getDataset = function()
 	{
 		return this.dataset;
-	}
+	};
 
 	this.setSubset = function(subset)
 	{
 		this.subset = subset;
 		return this;
-	}
+	};
 
 	this.getSubset = function()
 	{
@@ -46,7 +46,7 @@ var Model = Class.extend(function()
 			this.setSubset(this.getDataset());
 		}
 		return this.subset;
-	}
+	};
 
 	/**
 	 * Subset interaction methods
@@ -61,7 +61,7 @@ var Model = Class.extend(function()
 		});
 		this.setSubset(filter.operate(this.getSubset()));
 		return this;
-	}
+	};
 
 	this.sort = function(column, direction)
 	{
@@ -71,7 +71,7 @@ var Model = Class.extend(function()
 		}]);
 		this.setSubset(sorter.operate(this.getSubset()));
 		return this;
-	}
+	};
 
 	this.limit = function(amount, start)
 	{
@@ -81,7 +81,7 @@ var Model = Class.extend(function()
 		});
 		this.setSubset(limiter.operate(this.getSubset()));
 		return this;
-	}
+	};
 
 	this.distinct = function(column)
 	{
@@ -93,7 +93,7 @@ var Model = Class.extend(function()
 			}
 		});
 		return distinct;
-	}
+	};
 
 	this.pick = function(columns)
 	{
@@ -107,7 +107,7 @@ var Model = Class.extend(function()
 			picked.push(pickedRecord);
 		});
 		return picked;
-	}
+	};
 
 	/**
 	 * Subset getters
@@ -117,7 +117,7 @@ var Model = Class.extend(function()
 		var dataset = this.getSubset();
 		this.setSubset(null);
 		return dataset;
-	}
+	};
 
 	this.getModel = function()
 	{
@@ -126,5 +126,5 @@ var Model = Class.extend(function()
 		model.setColumns(this.getColumns());
 		model.setDataset(dataset);
 		return model;
-	}
+	};
 });

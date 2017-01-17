@@ -7,23 +7,23 @@ var PivotTableRenderer = Renderer.extend(function()
 	{
 		this.rows = rows;
 		return this;
-	}
+	};
 
 	this.getRows = function()
 	{
 		return this.rows;
-	}
+	};
 
 	this.setCols = function(cols)
 	{
 		this.cols = cols;
 		return this;
-	}
+	};
 
 	this.getCols = function()
 	{
 		return this.cols;
-	}
+	};
 
 	this.makeRowsWithValues = function()
 	{
@@ -35,7 +35,7 @@ var PivotTableRenderer = Renderer.extend(function()
 			rows.push(info);
 		});
 		return rows;
-	}
+	};
 
 	this.makeColsWithValues = function()
 	{
@@ -47,7 +47,7 @@ var PivotTableRenderer = Renderer.extend(function()
 			cols.push(info);
 		});
 		return cols;
-	}
+	};
 
 	this.makeResultGrid = function(model, cols, rows)
 	{
@@ -77,7 +77,7 @@ var PivotTableRenderer = Renderer.extend(function()
 			result = modelsCollector;
 		});
 		return result;
-	}
+	};
 
 	this.makeResultRows = function(model, rows)
 	{
@@ -106,7 +106,7 @@ var PivotTableRenderer = Renderer.extend(function()
 			result = modelsCollector;
 		});
 		return result;
-	}
+	};
 
 	this.makeResultCols = function(model, cols)
 	{
@@ -135,7 +135,7 @@ var PivotTableRenderer = Renderer.extend(function()
 			result = modelsCollector;
 		});
 		return result;
-	}
+	};
 
 	this.render = function(aggregator)
 	{
@@ -283,5 +283,5 @@ var PivotTableRenderer = Renderer.extend(function()
 		tr.append(td);
 
 		containerEl.append(tableEl);
-	}
+	};
 });

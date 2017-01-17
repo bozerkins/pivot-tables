@@ -6,10 +6,10 @@ var Connector = Class.extend(function()
 	{
 		this.model = model;
 		return this;
-	}
+	};
 
 	this.getModel = function()
 	{
 		return this.model;
-	}
+	};
 });

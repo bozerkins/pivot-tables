@@ -8,7 +8,7 @@ var Limiter = Class.extend(function()
 	this.constructor = function(instruction)
 	{
 		this.instruction = instruction;
-	}
+	};
 	/**
 	 * Setters / getters
 	 */
@@ -19,7 +19,7 @@ var Limiter = Class.extend(function()
 			throw "Invalid amount property passed to Instruction";
 		}
 		return this.instruction.amount;
-	}
+	};
 
 	this.getStart = function()
 	{
@@ -27,10 +27,10 @@ var Limiter = Class.extend(function()
 			throw "Invalid start property passed to Instruction";
 		}
 		return this.instruction.start;
-	}
+	};
 
 	this.operate = function(dataset)
 	{
 		return dataset.slice(this.getStart(), this.getAmount() + this.getStart());
-	}
+	};
 });
