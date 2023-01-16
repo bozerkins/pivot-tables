@@ -6,7 +6,7 @@ Creating Pivot Tables in JavaScript
 
 the usage example can be seen in ./index.html
 
-## 1) get your dataset into a variable
+## Define dataset
 
 an example dataset can be seen in ./dataset/mps.json
 though it's just a simple **array of json objects** (preferably of the same structure)
@@ -17,7 +17,7 @@ though it's just a simple **array of json objects** (preferably of the same stru
 ]
 ```
 
-## 2) create a model, which would contain the dataset
+## Transform Data to a Model
 ```javascript
 var model = new Model(
     ['_row','am','carb','cyl','disp','drat','gear','hp','mpg','qsec','vs','wt'],
@@ -26,13 +26,13 @@ var model = new Model(
 ```
 a model should contain **columns list** as a first variable, and the **dataset** as a second
 
-## 3) create a query, which would execute basic operations with the dataset (distinct, sort, filter)
+## Create a query object, that would be the interface for handling model data
 ```javascript
 var query = new Query();
 ```
 there is a ready example of a query, but you can craete your own with a simmilar interface
 
-## 4) create a renderer
+## Render everything
 ```javascript
 var renderer = new PivotTableRenderer(
     $('.container'),
@@ -44,7 +44,7 @@ var renderer = new PivotTableRenderer(
 ```
 last two arguments represent **rows** and **columns** to group by the data
 
-## 5) render the pivot table with a custom aggregation function
+## Define custom aggregate functions
 ```javascript
 renderer.render(function(model) { return model.getDataset().length; });
 ```
