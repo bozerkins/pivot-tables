@@ -1,8 +1,8 @@
-# pivot-tables
+# Pivot Tables
 
-a simple javascript example of how to create pivot table
+Creating Pivot Tables in JavaScript
 
-# usage example
+# Usage example
 
 the usage example can be seen in ./index.html
 
